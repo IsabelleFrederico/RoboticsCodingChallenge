@@ -150,16 +150,16 @@ Visualization is performed in Python using matplotlib.
 The following plots are generated:
 
 **Robot path colored by speed**
-![Path velocity](results/path_velocity.png)
+![Path velocity](images/path_velocity.png)
 
 **Curvature profile**
-![Curvature](results/curvature.png)
+![Curvature](images/curvature.png)
 
 **Speed profile**
-![Speed](results/speed.png)
+![Speed](images/speed.png)
 
 **Cumulative traversal time**
-![Time](results/time_cumulative.png)
+![Time](images/time_cumulative.png)
 
 These plots help understand how curvature influences the robot velocity.
 
