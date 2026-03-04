@@ -152,7 +152,20 @@ Where:
 
 Using the average speed provides a smoother approximation of the robot motion.
 
-## 5. Cleaned Area
+## 5. Cleaning Gadget Width
+
+The cleaning width is computed as the Euclidean distance between these two points:
+```
+gadgetWidth = sqrt((x1 - x0)² + (y1 - y0)²)
+```
+
+Where:
+
+**x0, y0** = coordinates of the first gadget point</br>
+**x1, y1** = coordinates of the second gadget point</br>
+**gadgetWidth** = width of the cleaning tool
+
+## 6. Cleaned Area
 
 The cleaned area is approximated using a grid-based occupancy approach.
 
