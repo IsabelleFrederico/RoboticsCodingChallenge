@@ -33,7 +33,7 @@ namespace robot
         const double area2 = std::abs(cross2D(BA, CAvec));
 
         const double k = area2 / (AB * BC * CA);
-        return 2.0 * k; // factor 2 for correct curvature formula
+        return 2.0 * k;
     }
 
     std::vector<double> curvatureProfile(const std::vector<Vec2> &path)
