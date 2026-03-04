@@ -1,6 +1,0 @@
-test_geometry 1 0.00224301
-test_curvature 1 0.00165339
-test_speed 1 0.00185008
-test_time 1 0.00149421
-test_area 1 0.0281836
----
