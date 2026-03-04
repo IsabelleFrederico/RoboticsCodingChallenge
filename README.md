@@ -1,6 +1,6 @@
 # Robot Path Analysis
 
-This project implements a simple C++ program that analyzes a robot path and computes several metrics from a JSON input file.
+This project implements a C++ program that analyzes a robot trajectory from a JSON input file and computes several metrics.
 
 The program calculates:
 
@@ -38,7 +38,7 @@ The program expects a JSON file with the following structure:
 ```
 
 ---
-# Description
+# Data Description
 
 - robot: Polygon representing the robot footprint.
 - cleaning_gadget: Line segment describing the width of the cleaning tool in the robot coordinate frame.
@@ -69,7 +69,7 @@ The triangle area is computed using the 2D cross product.
 
 Curvature is then approximated as:
 ```
-𝑘= 4𝐴/𝑎𝑏𝑐
+𝑘= 4 * 𝐴 / (𝑎 * 𝑏 * 𝑐)
 ```
 ​
 Where:
@@ -127,7 +127,8 @@ A grid with resolution cellSize = 0.01 m is created.
 
 The robot path is sampled along each segment.
 
-At each sampled point a circular footprint with radius r is marked.
+At each sampled point a circular cleaning footprint with radius r is marked on the grid.
+
 ```
 r = gadgetWidth / 2
 ```
@@ -150,20 +151,24 @@ Visualization is performed in Python using matplotlib.
 The following plots are generated:
 
 **Robot path colored by speed**
-![Path velocity](images/path_velocity.png)
+
+<img src="images/path_velocity.png" width="500">
 
 **Curvature profile**
-![Curvature](images/curvature.png)
+
+<img src="images/curvature.png" width="500">
 
 **Speed profile**
-![Speed](images/speed.png)
+
+<img src="images/speed.png" width="500">
 
 **Cumulative traversal time**
-![Time](images/time_cumulative.png)
+
+<img src="images/time_cumulative.png" width="500">
 
 These plots help understand how curvature influences the robot velocity.
 
-Example plots can be generated using a Python script or Jupyter notebook.
+The plots are generated from the CSV file exported by the C++ program using Python and matplotlib.
 
 --- 
 
@@ -244,6 +249,5 @@ Grid cell size: 0.01 m
 
 The curvature estimation and area computation rely on simplified approximations suitable for recorded robot trajectories.
 
-These approximations allow efficient computation while still producing realistic results.
-
+These approximations provide efficient computation while still producing realistic results for the given path data.
 ---
