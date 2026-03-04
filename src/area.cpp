@@ -8,7 +8,6 @@
 
 namespace robot
 {
-    // Pack 2x 32-bit signed indices into 64-bit key safely (works for negatives).
     static uint64_t packCell(int64_t ix, int64_t iy)
     {
         uint64_t ux = static_cast<uint64_t>(static_cast<uint32_t>(ix));
@@ -30,8 +29,6 @@ namespace robot
         const double r = 0.5 * gadgetWidth;
         const double r2 = r * r;
 
-        // More robust sampling: don't step too far relative to cell or radius.
-        // (Conservative enough to avoid gaps in most practical cases.)
         const double step = 0.5 * std::min(cellSize, r);
 
         std::unordered_set<uint64_t> visited;
@@ -39,13 +36,11 @@ namespace robot
 
         auto diskIntersectsCell = [&](double x, double y, int64_t ix, int64_t iy) -> bool
         {
-            // Cell bounds: [ix*cellSize, (ix+1)*cellSize] x [iy*cellSize, (iy+1)*cellSize]
             const double minX = static_cast<double>(ix) * cellSize;
             const double maxX = static_cast<double>(ix + 1) * cellSize;
             const double minY = static_cast<double>(iy) * cellSize;
             const double maxY = static_cast<double>(iy + 1) * cellSize;
 
-            // Closest point on the rectangle to (x,y)
             const double cx = std::clamp(x, minX, maxX);
             const double cy = std::clamp(y, minY, maxY);
 
@@ -59,8 +54,6 @@ namespace robot
             const int64_t cx = static_cast<int64_t>(std::floor(x / cellSize));
             const int64_t cy = static_cast<int64_t>(std::floor(y / cellSize));
 
-            // How many cells to check around the disk center.
-            // +1 to be safe at boundaries
             const int64_t dr = static_cast<int64_t>(std::ceil(r / cellSize)) + 1;
 
             for (int64_t dx = -dr; dx <= dr; ++dx)
@@ -93,7 +86,6 @@ namespace robot
                 continue;
             }
 
-            // If r is extremely small, step could become tiny; still keep sane minimum of 1 sample.
             const int samples = std::max(1, static_cast<int>(std::ceil(segLen / step)));
 
             for (int s = 0; s <= samples; ++s)
