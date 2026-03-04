@@ -40,9 +40,9 @@ The program expects a JSON file with the following structure:
 ---
 # Data Description
 
-- robot: Polygon representing the robot footprint.
-- cleaning_gadget: Line segment describing the width of the cleaning tool in the robot coordinate frame.
-- path: List of waypoints representing the recorded robot trajectory in meters.
+- **robot:** Polygon representing the robot footprint.
+- **cleaning_gadget:** Line segment describing the width of the cleaning tool in the robot coordinate frame.
+- **path:** List of waypoints representing the recorded robot trajectory in meters.
 
 ---
 # Computations
@@ -53,6 +53,14 @@ The path length is computed as the sum of Euclidean distances between consecutiv
 ```
 𝐿 = ∑ sqrt((𝑥𝑖+1 −𝑥𝑖)²+(𝑦𝑖+1 − 𝑦𝑖)²)
 ```
+Where:
+
+**L** = total path length in meters</br>
+**x[i], y[i]** = coordinates of waypoint i</br>
+**x[i+1], y[i+1]** = coordinates of the next waypoint</br>
+**i** = waypoint index along the path
+
+This formula computes the Euclidean distance between consecutive waypoints and sums all segment lengths.
 ​
 ## 2. Curvature Estimation
 
@@ -64,8 +72,13 @@ A = path[i-1]
 B = path[i]
 C = path[i+1]
 ```
+Where:
 
-The triangle area is computed using the 2D cross product.
+**A, B, C** = three consecutive waypoints</br>
+**B** = the point where curvature is evaluated</br>
+**i** = waypoint index
+
+These three points form a triangle that is used to approximate the local curvature of the path.
 
 Curvature is then approximated as:
 ```
@@ -74,9 +87,9 @@ Curvature is then approximated as:
 ​
 Where:
 
-A is the triangle area
-
-a, b, c are the triangle side lengths
+**k** curvature at waypoint i
+**A** is the triangle area</br>
+**a, b, c** are the triangle side lengths
 
 For the first and last point the curvature is set to zero because three points are required.
 
@@ -91,6 +104,12 @@ kmax  = 10 1/m
 vmax  = 1.1 m/s
 vmin  = 0.15 m/s
 ```
+Where:
+
+**kcrit** = curvature threshold where speed reduction starts</br>
+**kmax** = curvature where minimum speed is reached</br>
+**vmax** = maximum robot speed</br>
+**vmin** = minimum robot speed
 
 Speed function:
 ```
@@ -98,6 +117,12 @@ v(k) = vmax                                  if k < kcrit
 v(k) = vmax - (vmax-vmin)/(kmax-kcrit)*(k-kcrit)   if kcrit ≤ k < kmax
 v(k) = vmin                                  if k ≥ kmax
 ```
+
+Where:
+
+**v(k)** = robot speed as a function of curvature</br>
+
+This model slows the robot down when the path curvature increases.
 
 ## 4. Traversal Time
 
@@ -109,11 +134,21 @@ ds = distance(path[i], path[i+1])
 vseg = (v[i] + v[i+1]) / 2
 dt = ds / vseg
 ```
+Where:
+
+**ds** = distance of segment i</br>
+**v[i]** = robot speed at waypoint i</br>
+**v[i+1]** = robot speed at the next waypoint</br>
+**vseg** = average speed over the segment</br>
+**dt** = time required to traverse the segment
 
 Total time:
 ```
 𝑇=∑ 𝑑𝑠/𝑣𝑠𝑒𝑔
 ```
+Where:
+
+**T** = total traversal time of the robot
 
 Using the average speed provides a smoother approximation of the robot motion.
 
@@ -132,6 +167,11 @@ At each sampled point a circular cleaning footprint with radius r is marked on t
 ```
 r = gadgetWidth / 2
 ```
+Where:
+
+r = radius of the cleaning footprint
+
+gadgetWidth = width of the cleaning gadget
 
 Each grid cell is stored in a hash set to avoid duplicates.
 
@@ -249,5 +289,4 @@ Grid cell size: 0.01 m
 
 The curvature estimation and area computation rely on simplified approximations suitable for recorded robot trajectories.
 
-These approximations provide efficient computation while still producing realistic results for the given path data.
 ---
