@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/test_area.dir/tests/test_area.cpp.o CMakeFiles/test_area.dir/src/area.cpp.o -o test_area 
