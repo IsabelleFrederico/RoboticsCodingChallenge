@@ -38,7 +38,6 @@ The program expects a JSON file with the following structure:
 ```
 
 ---
-
 # Data Description
 
 - **robot:** Polygon representing the robot footprint.
@@ -46,9 +45,7 @@ The program expects a JSON file with the following structure:
 - **path:** List of waypoints representing the recorded robot trajectory in meters.
 
 ---
-
 # Computations
-
 ## 1. Path Length
 
 The path length is computed as the sum of Euclidean distances between consecutive points.
@@ -56,7 +53,6 @@ The path length is computed as the sum of Euclidean distances between consecutiv
 ```
 𝐿 = ∑ sqrt((𝑥𝑖+1 −𝑥𝑖)²+(𝑦𝑖+1 − 𝑦𝑖)²)
 ```
-
 Where:
 
 **L** = total path length in meters</br>
@@ -66,19 +62,16 @@ Where:
 
 This formula computes the Euclidean distance between consecutive waypoints and sums all segment lengths.
 ​
-
 ## 2. Curvature Estimation
 
 The curvature is approximated using three consecutive points.
 
 For points:
-
 ```
 A = path[i-1]
 B = path[i]
 C = path[i+1]
 ```
-
 Where:
 
 **A, B, C** = three consecutive waypoints</br>
@@ -88,11 +81,9 @@ Where:
 These three points form a triangle that is used to approximate the local curvature of the path.
 
 Curvature is then approximated as:
-
 ```
 𝑘= 4 * 𝐴 / (𝑎 * 𝑏 * 𝑐)
 ```
-
 ​
 Where:
 
@@ -107,14 +98,12 @@ For the first and last point the curvature is set to zero because three points a
 The robot speed depends on the curvature.
 
 Parameters:
-
 ```
 kcrit = 0.5 1/m
 kmax  = 10 1/m
 vmax  = 1.1 m/s
 vmin  = 0.15 m/s
 ```
-
 Where:
 
 **kcrit** = curvature threshold where speed reduction starts</br>
@@ -123,7 +112,6 @@ Where:
 **vmin** = minimum robot speed
 
 Speed function:
-
 ```
 v(k) = vmax                                  if k < kcrit
 v(k) = vmax - (vmax-vmin)/(kmax-kcrit)*(k-kcrit)   if kcrit ≤ k < kmax
@@ -141,13 +129,11 @@ This model slows the robot down when the path curvature increases.
 Traversal time is computed per path segment.
 
 For segment i:
-
 ```
 ds = distance(path[i], path[i+1])
 vseg = (v[i] + v[i+1]) / 2
 dt = ds / vseg
 ```
-
 Where:
 
 **ds** = distance of segment i</br>
@@ -157,11 +143,9 @@ Where:
 **dt** = time required to traverse the segment
 
 Total time:
-
 ```
 𝑇=∑ 𝑑𝑠/𝑣𝑠𝑒𝑔
 ```
-
 Where:
 
 **T** = total traversal time of the robot
@@ -171,7 +155,6 @@ Using the average speed provides a smoother approximation of the robot motion.
 ## 5. Cleaning Gadget Width
 
 The cleaning width is computed as the Euclidean distance between these two points:
-
 ```
 gadgetWidth = sqrt((x1 - x0)² + (y1 - y0)²)
 ```
@@ -197,7 +180,6 @@ At each sampled point a circular cleaning footprint with radius r is marked on t
 ```
 r = gadgetWidth / 2
 ```
-
 Where:
 
 r = radius of the cleaning footprint
@@ -207,7 +189,6 @@ gadgetWidth = width of the cleaning gadget
 Each grid cell is stored in a hash set to avoid duplicates.
 
 The final area is computed as:
-
 ```
 area = number_of_cells * cellSize²
 ```
@@ -242,22 +223,20 @@ These plots help understand how curvature influences the robot velocity.
 
 The plots are generated from the CSV file exported by the C++ program using Python and matplotlib.
 
----
+--- 
 
 # Requirements:
 
 - CMake
 - C++20 compatible compiler (GCC / Clang / MSVC)
 
-_Build:_
-
+*Build:*
 ```
 cmake -S . -B build
 cmake --build build
 ```
 
-_Run the program:_
-
+*Run the program:*
 ```
 ./build/robot_path_project data/short.json
 ```
@@ -269,12 +248,11 @@ _Run the program:_
 Unit tests are implemented using CTest.
 
 Run tests with:
-
 ```
 ctest --test-dir build
 ```
 
-_Project Structure_
+*Project Structure*
 
 ```
 include/
@@ -320,7 +298,6 @@ Grid cell size: 0.01 m
 ```
 
 ---
-
 # Notes
 
 The curvature estimation and area computation rely on simplified approximations suitable for recorded robot trajectories.
