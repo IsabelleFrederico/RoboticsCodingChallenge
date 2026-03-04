@@ -87,9 +87,9 @@ Curvature is then approximated as:
 ​
 Where:
 
-**k** curvature at waypoint i
-**A** is the triangle area</br>
-**a, b, c** are the triangle side lengths
+**k** = curvature at waypoint i
+**A** = the triangle area</br>
+**a, b, c** = the triangle side lengths
 
 For the first and last point the curvature is set to zero because three points are required.
 
